@@ -1,0 +1,7 @@
+flask
+paho-mqtt
+werkzeug
+python-dotenv
+flask-sqlalchemy
+flask-cors
+qrcode

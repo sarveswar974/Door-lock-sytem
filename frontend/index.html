@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Door Lock System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-shape shape-1"></div><div class="bg-shape shape-2"></div><div class="bg-shape shape-3"></div>
+
+
+    <div class="keypad-overlay" id="keypadOverlay" style="display: none;">
+        <div class="glass-card keypad-card">
+            <div class="keypad-header"><h3>Enter Door PIN</h3><button class="close-keypad" onclick="hideKeypad()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="keypad-display-wrapper"><div class="keypad-display" id="keypadDisplay"></div></div>
+            <div class="keypad-grid">
+                <button class="keypad-btn" onclick="pressKey('1')">1</button>
+                <button class="keypad-btn" onclick="pressKey('2')">2</button>
+                <button class="keypad-btn" onclick="pressKey('3')">3</button>
+                <button class="keypad-btn" onclick="pressKey('4')">4</button>
+                <button class="keypad-btn" onclick="pressKey('5')">5</button>
+                <button class="keypad-btn" onclick="pressKey('6')">6</button>
+                <button class="keypad-btn" onclick="pressKey('7')">7</button>
+                <button class="keypad-btn" onclick="pressKey('8')">8</button>
+                <button class="keypad-btn" onclick="pressKey('9')">9</button>
+                <button class="keypad-btn clear" onclick="clearKeypad()"><i class="fa-solid fa-delete-left"></i></button>
+                <button class="keypad-btn" onclick="pressKey('0')">0</button>
+                <button class="keypad-btn submit" onclick="submitPin()"><i class="fa-solid fa-check"></i></button>
+            </div>
+        </div>
+    </div>
+
+
+    <nav class="top-nav">
+        <div class="nav-brand"><i class="fa-solid fa-house-lock"></i> SmartLock Pro</div>
+        <div class="nav-controls">
+            <button class="btn-icon-only" onclick="showQRCode()" title="Share Access QR">
+                <i class="fa-solid fa-qrcode"></i>
+            </button>
+            <div class="connection-status" id="connectionStatus"><span class="pulse-dot"></span> Connecting...</div>
+        </div>
+    </nav>
+
+    <!-- QR Code Overlay -->
+    <div class="qr-overlay" id="qrOverlay" style="display: none;">
+        <div class="glass-card qr-card">
+            <div class="keypad-header">
+                <h3>Scan to Open</h3>
+                <button class="close-keypad" onclick="hideQRCode()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="qr-container" id="qrContainer">
+                <!-- QR Code SVG will be injected here -->
+            </div>
+            <p class="qr-info">Scan this QR code with another device on the same Wi-Fi to open the door lock dashboard.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="status-section">
+            <div class="glass-card status-card">
+                <div class="status-header"><h2>Live Status</h2><span class="status-badge normal" id="systemStatus">System Normal</span></div>
+                <div class="door-status-display locked" id="doorStatus">
+                    <div class="status-icon"><i class="fa-solid fa-lock" id="doorIcon"></i></div>
+                    <div class="status-text"><h3>Door is</h3><h1 id="doorText">LOCKED</h1></div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="controls-section">
+
+            <div class="glass-card control-card">
+                <div class="card-header"><h3>Quick Controls</h3></div>
+                <div class="button-grid">
+                    <button class="btn btn-success btn-large btn-block" onclick="showKeypad()"><i class="fa-solid fa-unlock-keyhole"></i> Unlock (PIN)</button>
+                    <button class="btn btn-danger btn-block" onclick="sendCommand('LOCK')"><i class="fa-solid fa-lock"></i> Lock Door</button>
+                </div>
+            </div>
+
+
+            <div class="glass-card log-card mt-4">
+                <div class="card-header"><i class="fa-solid fa-microchip"></i><h3>System Activity Log</h3></div>
+                <div id="logContainer" class="log-container">
+                    <div class="log-entry system"><span class="log-time">Initializing...</span> System ready.</div>
+                </div>
+            </div>
+            <div class="glass-card security-card" id="securitySettings" style="margin-top: 1.5rem;">
+                <div class="card-header"><i class="fa-solid fa-shield-halved"></i><h3>Update Door PIN</h3></div>
+                <div class="settings-form">
+                    <div class="input-group">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="password" id="newDoorPin" placeholder="New PIN (4-6 digits)" maxlength="6">
+                    </div>
+                    <button class="btn btn-primary btn-block mt-3" onclick="changeDoorPin()">Update PIN</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
