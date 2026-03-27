@@ -5,3 +5,4 @@ python-dotenv
 flask-sqlalchemy
 flask-cors
 qrcode
+gunicorn

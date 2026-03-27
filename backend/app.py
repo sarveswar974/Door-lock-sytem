@@ -154,8 +154,8 @@ def get_qrcode():
         import qrcode
         import qrcode.image.svg
         
-        local_ip = get_local_ip()
-        url = f"http://{local_ip}:5000"
+        # Use the actual host URL (e.g., https://your-render-app.onrender.com)
+        url = request.host_url.rstrip('/')
             
         # Create QR code
         factory = qrcode.image.svg.SvgPathImage
